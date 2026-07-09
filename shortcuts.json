@@ -1,0 +1,37 @@
+[
+  {
+    "shortcut": "Ctrl + Shift + L",
+    "tool": "VS Code",
+    "description": "Select all occurrences of current selection. Perfect for renaming variables or editing multiple instances at once without using find and replace!"
+  },
+  {
+    "shortcut": "Alt + Click",
+    "tool": "VS Code",
+    "description": "Insert multiple cursors. Edit multiple lines simultaneously, saving you tons of time when modifying repetitive code."
+  },
+  {
+    "shortcut": "Ctrl + P",
+    "tool": "VS Code",
+    "description": "Quick Open. Navigate to any file in your project instantly just by typing part of its name."
+  },
+  {
+    "shortcut": "Ctrl + Shift + T",
+    "tool": "Chrome",
+    "description": "Reopen closed tab. A lifesaver when you accidentally close that StackOverflow tab you desperately needed."
+  },
+  {
+    "shortcut": "Win + V",
+    "tool": "Windows",
+    "description": "Open clipboard history. See and paste from a list of items you've copied recently, not just the last one."
+  },
+  {
+    "shortcut": "Command + Shift + 4",
+    "tool": "macOS",
+    "description": "Capture a selected portion of the screen. Great for quick bug reporting or sharing code snippets."
+  },
+  {
+    "shortcut": "Ctrl + /",
+    "tool": "VS Code",
+    "description": "Toggle line comment. Quickly comment or uncomment a single line or a block of code."
+  }
+]
