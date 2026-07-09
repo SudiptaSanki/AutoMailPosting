@@ -28,6 +28,9 @@ async function sendDigest() {
             <h1 style="color: #4CAF50;">🔥 Today's Tech Content Digest</h1>
     `;
 
+    const today = new Date();
+    const currentContext = `Current Date: ${today.toDateString()}. Ensure the posts feel timely and relevant to this week's tech trends.`;
+
     for (const story of stories) {
         if (hasBeenPosted(story.url)) {
             console.log(`Skipping duplicate/recently posted story: ${story.title} from ${story.source}`);
@@ -38,10 +41,10 @@ async function sendDigest() {
         
         // Generate drafts
         const [linkedIn, x, reddit, instagram, keywords] = await Promise.all([
-            generateLinkedInDraft(story),
-            generateXDraft(story),
-            generateRedditDraft(story),
-            generateInstagramDraft(story),
+            generateLinkedInDraft(story, currentContext),
+            generateXDraft(story, currentContext),
+            generateRedditDraft(story, currentContext),
+            generateInstagramDraft(story, currentContext),
             extractKeywords(story.title + " " + (story.description || story.contentSnippet || ""))
         ]);
 
@@ -55,17 +58,17 @@ async function sendDigest() {
                 <h2 style="color: #03A9F4;">\${story.title} (\${story.source})</h2>
                 <p><a href="\${story.url}" style="color: #FF9800;">Read Original Article</a></p>
                 
-                <h3 style="color: #E91E63;">LinkedIn Draft:</h3>
-                <pre style="white-space: pre-wrap; background: #000; padding: 10px; border-radius: 4px;">\${linkedIn}</pre>
+                <h3 style="color: #E91E63;">LinkedIn Drafts (5 Options):</h3>
+                <pre style="white-space: pre-wrap; background: #000; padding: 10px; border-radius: 4px; font-family: monospace;">\${linkedIn}</pre>
                 
-                <h3 style="color: #E91E63;">X (Twitter) Draft:</h3>
-                <pre style="white-space: pre-wrap; background: #000; padding: 10px; border-radius: 4px;">\${x}</pre>
+                <h3 style="color: #E91E63;">X (Twitter) Drafts (5 Options):</h3>
+                <pre style="white-space: pre-wrap; background: #000; padding: 10px; border-radius: 4px; font-family: monospace;">\${x}</pre>
                 
-                <h3 style="color: #E91E63;">Reddit Draft:</h3>
-                <pre style="white-space: pre-wrap; background: #000; padding: 10px; border-radius: 4px;">\${reddit}</pre>
+                <h3 style="color: #E91E63;">Reddit Drafts (5 Options):</h3>
+                <pre style="white-space: pre-wrap; background: #000; padding: 10px; border-radius: 4px; font-family: monospace;">\${reddit}</pre>
                 
-                <h3 style="color: #E91E63;">Instagram Carousel Concept:</h3>
-                <pre style="white-space: pre-wrap; background: #000; padding: 10px; border-radius: 4px;">\${instagram}</pre>
+                <h3 style="color: #E91E63;">Instagram Concepts (5 Options):</h3>
+                <pre style="white-space: pre-wrap; background: #000; padding: 10px; border-radius: 4px; font-family: monospace;">\${instagram}</pre>
                 
                 <p>🎨 <strong>Media Suggestions:</strong> 
                    <a href="\${giphyLink}" style="color: #9C27B0;">Giphy</a> | 
@@ -86,6 +89,7 @@ async function sendDigest() {
     \`;
 
     // Send Email
+    const mailTo = process.env.GMAIL_TO || process.env.GMAIL_USER;
     if (process.env.GMAIL_USER && process.env.GMAIL_PASS) {
         let transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -97,7 +101,7 @@ async function sendDigest() {
 
         let mailOptions = {
             from: process.env.GMAIL_USER,
-            to: process.env.GMAIL_USER,
+            to: mailTo,
             subject: '🚀 Your Daily Tech Content Drafts',
             html: emailHtml
         };

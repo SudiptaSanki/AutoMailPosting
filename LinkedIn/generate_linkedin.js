@@ -1,19 +1,22 @@
 const { generatePost } = require('../gemini');
 
-async function generateLinkedInDraft(article) {
+async function generateLinkedInDraft(article, currentContext) {
     const prompt = `
 You are an expert LinkedIn ghostwriter for a tech audience. 
-Create an engaging LinkedIn post based on this article:
+Create 5 distinct, engaging LinkedIn post options based on this article:
 Title: ${article.title}
 Source: ${article.source}
 Context: ${article.description || article.contentSnippet || "A top trending tech article."}
+Time Context: ${currentContext}
 
-Format guidelines:
-- Start with a strong hook.
-- Use 2-3 bullet points for readability.
-- Keep a professional yet conversational tone.
-- End with a question to encourage comments.
-- Include 3-4 relevant hashtags at the bottom.
+Format guidelines for EACH of the 5 options:
+- Option 1: Story-driven (focus on a personal anecdote or lesson)
+- Option 2: Actionable Advice (focus on what the reader can do today)
+- Option 3: Contrarian/Thought-Provoking (challenge the status quo)
+- Option 4: Summary/Listicle (bullet points of key takeaways)
+- Option 5: Future-focused (how this impacts the next 5 years)
+- Include 3-4 relevant hashtags at the bottom of each.
+- Maintain a professional yet conversational tone.
     `;
     
     return await generatePost(prompt);
