@@ -17,6 +17,9 @@ Format guidelines for EACH of the 5 options:
 - Option 5: "Day in the life" / Relatable developer carousel.
 - Include Slide 1 (Hook), Slide 2-4 (Key takeaways), Slide 5 (Call to action).
 - Caption: Engaging text with emojis, asking a question, and 5-10 relevant hashtags.
+- CRITICAL: Do NOT use any Markdown formatting (no asterisks '**', no '#' headers).
+- CRITICAL: Do NOT use LaTeX mathematical notation (like \\( ... \\) or $$).
+- Use standard line breaks and bullet points (e.g. • or -) for visual structure.
     `;
     
     return await generatePost(prompt);

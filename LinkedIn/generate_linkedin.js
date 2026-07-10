@@ -17,6 +17,9 @@ Format guidelines for EACH of the 5 options:
 - Option 5: Future-focused (how this impacts the next 5 years)
 - Include 3-4 relevant hashtags at the bottom of each.
 - Maintain a professional yet conversational tone.
+- CRITICAL: Do NOT use any Markdown formatting (no asterisks '**' for bolding, no '#' for headers, etc.) as the target platforms do not parse them.
+- CRITICAL: Do NOT use LaTeX mathematical notation (like \\( ... \\) or $$). Use standard plain text representation.
+- Use emojis and standard line breaks to format and structure the text beautifully.
     `;
     
     return await generatePost(prompt);

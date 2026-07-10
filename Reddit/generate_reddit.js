@@ -15,7 +15,8 @@ Format guidelines for EACH of the 5 options:
 - Option 3: Beginner friendly / "Can someone explain this?"
 - Option 4: Developer rant / "Am I the only one frustrated by this?"
 - Option 5: Career focused / "How does this affect our jobs?"
-- Use Markdown formatting.
+- Use clean Markdown formatting (bold, italics, headers) for readability, as Reddit parses Markdown.
+- CRITICAL: Do NOT use LaTeX mathematical notation (like \\( ... \\) or $$). Use standard text.
 - Be conversational and authentic, redditors hate corporate-speak.
     `;
     

@@ -54,26 +54,29 @@ async function sendDigest() {
         const unsplashLink = `https://unsplash.com/s/photos/${encodeURIComponent(keywords)}`;
 
         emailHtml += `
-            <div style="background-color: #1e1e1e; padding: 15px; margin-top: 20px; border-radius: 8px;">
-                <h2 style="color: #03A9F4;">${story.title} (${story.source})</h2>
-                <p><a href="${story.url}" style="color: #FF9800;">Read Original Article</a></p>
-                
-                <h3 style="color: #E91E63;">LinkedIn Drafts (5 Options):</h3>
-                <pre style="white-space: pre-wrap; background: #000; padding: 10px; border-radius: 4px; font-family: monospace;">${linkedIn}</pre>
-                
-                <h3 style="color: #E91E63;">X (Twitter) Drafts (5 Options):</h3>
-                <pre style="white-space: pre-wrap; background: #000; padding: 10px; border-radius: 4px; font-family: monospace;">${x}</pre>
-                
-                <h3 style="color: #E91E63;">Reddit Drafts (5 Options):</h3>
-                <pre style="white-space: pre-wrap; background: #000; padding: 10px; border-radius: 4px; font-family: monospace;">${reddit}</pre>
-                
-                <h3 style="color: #E91E63;">Instagram Concepts (5 Options):</h3>
-                <pre style="white-space: pre-wrap; background: #000; padding: 10px; border-radius: 4px; font-family: monospace;">${instagram}</pre>
-                
-                <p>🎨 <strong>Media Suggestions:</strong> 
-                   <a href="${giphyLink}" style="color: #9C27B0;">Giphy</a> | 
-                   <a href="${unsplashLink}" style="color: #9C27B0;">Unsplash</a>
+            <div style="background-color: #1e1e1e; padding: 20px; margin-top: 25px; border-radius: 8px; border: 1px solid #333;">
+                <h2 style="color: #03A9F4; margin-top: 0;">📰 ${story.title} (${story.source})</h2>
+                <p style="margin-bottom: 20px;">
+                    🔗 <a href="${story.url}" style="color: #FF9800; text-decoration: none; font-weight: bold;">Read Original Article</a>
                 </p>
+                
+                <h3 style="color: #4CAF50; border-bottom: 1px solid #333; padding-bottom: 5px; font-size: 16px;">👔 LinkedIn Drafts (5 Options)</h3>
+                <div style="white-space: pre-wrap; background: #262626; padding: 15px; border-radius: 6px; font-family: system-ui, sans-serif; font-size: 14px; line-height: 1.6; color: #e0e0e0; margin-bottom: 20px;">${linkedIn}</div>
+                
+                <h3 style="color: #00BCD4; border-bottom: 1px solid #333; padding-bottom: 5px; font-size: 16px;">🐦 X (Twitter) Drafts (5 Options)</h3>
+                <div style="white-space: pre-wrap; background: #262626; padding: 15px; border-radius: 6px; font-family: system-ui, sans-serif; font-size: 14px; line-height: 1.6; color: #e0e0e0; margin-bottom: 20px;">${x}</div>
+                
+                <h3 style="color: #FF5722; border-bottom: 1px solid #333; padding-bottom: 5px; font-size: 16px;">👽 Reddit Drafts (5 Options)</h3>
+                <div style="white-space: pre-wrap; background: #262626; padding: 15px; border-radius: 6px; font-family: system-ui, sans-serif; font-size: 14px; line-height: 1.6; color: #e0e0e0; margin-bottom: 20px;">${reddit}</div>
+                
+                <h3 style="color: #E91E63; border-bottom: 1px solid #333; padding-bottom: 5px; font-size: 16px;">📸 Instagram Concepts (5 Options)</h3>
+                <div style="white-space: pre-wrap; background: #262626; padding: 15px; border-radius: 6px; font-family: system-ui, sans-serif; font-size: 14px; line-height: 1.6; color: #e0e0e0; margin-bottom: 20px;">${instagram}</div>
+                
+                <div style="background-color: #262626; padding: 12px; border-radius: 6px; border-left: 4px solid #9C27B0; margin-top: 15px;">
+                    🎨 <strong>Media Ideas:</strong> 
+                    <a href="${unsplashLink}" style="color: #9C27B0; text-decoration: none; font-weight: bold; margin-left: 10px;">📸 Search Unsplash</a> | 
+                    <a href="${giphyLink}" style="color: #9C27B0; text-decoration: none; font-weight: bold; margin-left: 5px;">🎬 Search Giphy</a>
+                </div>
             </div>
         `;
     }

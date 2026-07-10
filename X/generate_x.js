@@ -19,6 +19,9 @@ Format guidelines for EACH of the 5 options:
 - Grab attention immediately.
 - Use 1-2 emojis maximum per tweet.
 - Do NOT use hashtags (they look spammy on X now).
+- CRITICAL: Do NOT use any Markdown formatting (no asterisks '**', no '#' headers).
+- CRITICAL: Do NOT use LaTeX notation (like \\( ... \\) or $$).
+- Use standard line breaks to separate options.
     `;
     
     return await generateGroqPost(prompt);
