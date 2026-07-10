@@ -50,43 +50,43 @@ async function sendDigest() {
 
         addToHistory(story);
 
-        const giphyLink = \`https://giphy.com/search/\${encodeURIComponent(keywords)}\`;
-        const unsplashLink = \`https://unsplash.com/s/photos/\${encodeURIComponent(keywords)}\`;
+        const giphyLink = `https://giphy.com/search/${encodeURIComponent(keywords)}`;
+        const unsplashLink = `https://unsplash.com/s/photos/${encodeURIComponent(keywords)}`;
 
-        emailHtml += \`
+        emailHtml += `
             <div style="background-color: #1e1e1e; padding: 15px; margin-top: 20px; border-radius: 8px;">
-                <h2 style="color: #03A9F4;">\${story.title} (\${story.source})</h2>
-                <p><a href="\${story.url}" style="color: #FF9800;">Read Original Article</a></p>
+                <h2 style="color: #03A9F4;">${story.title} (${story.source})</h2>
+                <p><a href="${story.url}" style="color: #FF9800;">Read Original Article</a></p>
                 
                 <h3 style="color: #E91E63;">LinkedIn Drafts (5 Options):</h3>
-                <pre style="white-space: pre-wrap; background: #000; padding: 10px; border-radius: 4px; font-family: monospace;">\${linkedIn}</pre>
+                <pre style="white-space: pre-wrap; background: #000; padding: 10px; border-radius: 4px; font-family: monospace;">${linkedIn}</pre>
                 
                 <h3 style="color: #E91E63;">X (Twitter) Drafts (5 Options):</h3>
-                <pre style="white-space: pre-wrap; background: #000; padding: 10px; border-radius: 4px; font-family: monospace;">\${x}</pre>
+                <pre style="white-space: pre-wrap; background: #000; padding: 10px; border-radius: 4px; font-family: monospace;">${x}</pre>
                 
                 <h3 style="color: #E91E63;">Reddit Drafts (5 Options):</h3>
-                <pre style="white-space: pre-wrap; background: #000; padding: 10px; border-radius: 4px; font-family: monospace;">\${reddit}</pre>
+                <pre style="white-space: pre-wrap; background: #000; padding: 10px; border-radius: 4px; font-family: monospace;">${reddit}</pre>
                 
                 <h3 style="color: #E91E63;">Instagram Concepts (5 Options):</h3>
-                <pre style="white-space: pre-wrap; background: #000; padding: 10px; border-radius: 4px; font-family: monospace;">\${instagram}</pre>
+                <pre style="white-space: pre-wrap; background: #000; padding: 10px; border-radius: 4px; font-family: monospace;">${instagram}</pre>
                 
                 <p>🎨 <strong>Media Suggestions:</strong> 
-                   <a href="\${giphyLink}" style="color: #9C27B0;">Giphy</a> | 
-                   <a href="\${unsplashLink}" style="color: #9C27B0;">Unsplash</a>
+                   <a href="${giphyLink}" style="color: #9C27B0;">Giphy</a> | 
+                   <a href="${unsplashLink}" style="color: #9C27B0;">Unsplash</a>
                 </p>
             </div>
-        \`;
+        `;
     }
 
     // Add Shortcut
-    emailHtml += \`
+    emailHtml += `
         <div style="background-color: #2e2e2e; padding: 15px; margin-top: 30px; border-radius: 8px;">
             <h2 style="color: #FFEB3B;">⌨️ Productivity Shortcut of the Day</h2>
-            <p><strong>\${shortcut.shortcut}</strong> (\${shortcut.tool})</p>
-            <p>\${shortcut.description}</p>
+            <p><strong>${shortcut.shortcut}</strong> (${shortcut.tool})</p>
+            <p>${shortcut.description}</p>
         </div>
         </div>
-    \`;
+    `;
 
     // Send Email
     const mailTo = process.env.GMAIL_TO || process.env.GMAIL_USER;
