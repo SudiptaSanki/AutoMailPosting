@@ -9,6 +9,17 @@ const { generateInstagramDraft } = require('./Instagram/generate_instagram');
 const { hasBeenPosted, addToHistory } = require('./history');
 const shortcuts = require('./shortcuts.json');
 
+function cleanLatex(text) {
+    if (!text) return "";
+    return text
+        .replace(/\\\\\((.*?)\\\\\)/g, '$1') // Double escaped inline \\( ... \\)
+        .replace(/\\\((.*?)\\\)/g, '$1')     // Single escaped inline \( ... \)
+        .replace(/\\\\\[(.*?)\\\\\]/g, '$1') // Double escaped block \\[ ... \\]
+        .replace(/\\\[(.*?)\\\]/g, '$1')     // Single escaped block \[ ... \]
+        .replace(/\$\$(.*?)\$\$/g, '$1')     // Block $$ ... $$
+        .replace(/\*\*/g, '');               // Safeguard: strip any leftover markdown bold stars
+}
+
 async function sendDigest() {
     console.log("Starting daily digest generation...");
 
@@ -24,8 +35,8 @@ async function sendDigest() {
     const shortcut = shortcuts[dayOfYear % shortcuts.length];
 
     let emailHtml = `
-        <div style="font-family: Arial, sans-serif; background-color: #121212; color: #ffffff; padding: 20px;">
-            <h1 style="color: #4CAF50;">🔥 Today's Tech Content Digest</h1>
+        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #121212; color: #e0e0e0; padding: 20px; max-width: 600px; margin: 0 auto; line-height: 1.6;">
+            <h1 style="color: #ffffff; border-bottom: 2px solid #333; padding-bottom: 10px; font-size: 22px; margin-top: 0;">📰 Tech Content Digest</h1>
     `;
 
     const today = new Date();
@@ -40,7 +51,7 @@ async function sendDigest() {
         console.log(`Processing story: ${story.title} from ${story.source}`);
         
         // Generate drafts
-        const [linkedIn, x, reddit, instagram, keywords] = await Promise.all([
+        let [linkedIn, x, reddit, instagram, keywords] = await Promise.all([
             generateLinkedInDraft(story, currentContext),
             generateXDraft(story, currentContext),
             generateRedditDraft(story, currentContext),
@@ -48,34 +59,40 @@ async function sendDigest() {
             extractKeywords(story.title + " " + (story.description || story.contentSnippet || ""))
         ]);
 
+        // Clean LaTeX and leftover Markdown bold stars from AI drafts
+        linkedIn = cleanLatex(linkedIn);
+        x = cleanLatex(x);
+        reddit = cleanLatex(reddit);
+        instagram = cleanLatex(instagram);
+
         addToHistory(story);
 
         const giphyLink = `https://giphy.com/search/${encodeURIComponent(keywords)}`;
         const unsplashLink = `https://unsplash.com/s/photos/${encodeURIComponent(keywords)}`;
 
         emailHtml += `
-            <div style="background-color: #1e1e1e; padding: 20px; margin-top: 25px; border-radius: 8px; border: 1px solid #333;">
-                <h2 style="color: #03A9F4; margin-top: 0;">📰 ${story.title} (${story.source})</h2>
-                <p style="margin-bottom: 20px;">
-                    🔗 <a href="${story.url}" style="color: #FF9800; text-decoration: none; font-weight: bold;">Read Original Article</a>
-                </p>
+            <div style="background-color: #1c1c1c; padding: 20px; margin-top: 25px; border-radius: 8px; border: 1px solid #2d2d2d;">
+                <h2 style="color: #ffffff; font-size: 18px; margin-top: 0; line-height: 1.4;">${story.title}</h2>
+                <p style="margin-top: 5px; font-size: 13px; color: #888;">Source: ${story.source} | <a href="${story.url}" style="color: #03A9F4; text-decoration: none;">Read Article 🔗</a></p>
                 
-                <h3 style="color: #4CAF50; border-bottom: 1px solid #333; padding-bottom: 5px; font-size: 16px;">👔 LinkedIn Drafts (5 Options)</h3>
-                <div style="white-space: pre-wrap; background: #262626; padding: 15px; border-radius: 6px; font-family: system-ui, sans-serif; font-size: 14px; line-height: 1.6; color: #e0e0e0; margin-bottom: 20px;">${linkedIn}</div>
+                <hr style="border: 0; border-top: 1px solid #2d2d2d; margin: 15px 0;" />
+
+                <h3 style="color: #ffffff; font-size: 14px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">👔 LinkedIn Drafts</h3>
+                <div style="white-space: pre-wrap; background: #121212; padding: 12px; border-radius: 6px; font-size: 14px; color: #cccccc; margin-bottom: 20px; border: 1px solid #2d2d2d;">${linkedIn}</div>
                 
-                <h3 style="color: #00BCD4; border-bottom: 1px solid #333; padding-bottom: 5px; font-size: 16px;">🐦 X (Twitter) Drafts (5 Options)</h3>
-                <div style="white-space: pre-wrap; background: #262626; padding: 15px; border-radius: 6px; font-family: system-ui, sans-serif; font-size: 14px; line-height: 1.6; color: #e0e0e0; margin-bottom: 20px;">${x}</div>
+                <h3 style="color: #ffffff; font-size: 14px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">🐦 X (Twitter) Drafts</h3>
+                <div style="white-space: pre-wrap; background: #121212; padding: 12px; border-radius: 6px; font-size: 14px; color: #cccccc; margin-bottom: 20px; border: 1px solid #2d2d2d;">${x}</div>
                 
-                <h3 style="color: #FF5722; border-bottom: 1px solid #333; padding-bottom: 5px; font-size: 16px;">👽 Reddit Drafts (5 Options)</h3>
-                <div style="white-space: pre-wrap; background: #262626; padding: 15px; border-radius: 6px; font-family: system-ui, sans-serif; font-size: 14px; line-height: 1.6; color: #e0e0e0; margin-bottom: 20px;">${reddit}</div>
+                <h3 style="color: #ffffff; font-size: 14px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">👽 Reddit Drafts</h3>
+                <div style="white-space: pre-wrap; background: #121212; padding: 12px; border-radius: 6px; font-size: 14px; color: #cccccc; margin-bottom: 20px; border: 1px solid #2d2d2d;">${reddit}</div>
                 
-                <h3 style="color: #E91E63; border-bottom: 1px solid #333; padding-bottom: 5px; font-size: 16px;">📸 Instagram Concepts (5 Options)</h3>
-                <div style="white-space: pre-wrap; background: #262626; padding: 15px; border-radius: 6px; font-family: system-ui, sans-serif; font-size: 14px; line-height: 1.6; color: #e0e0e0; margin-bottom: 20px;">${instagram}</div>
+                <h3 style="color: #ffffff; font-size: 14px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">📸 Instagram Concepts</h3>
+                <div style="white-space: pre-wrap; background: #121212; padding: 12px; border-radius: 6px; font-size: 14px; color: #cccccc; margin-bottom: 20px; border: 1px solid #2d2d2d;">${instagram}</div>
                 
-                <div style="background-color: #262626; padding: 12px; border-radius: 6px; border-left: 4px solid #9C27B0; margin-top: 15px;">
+                <div style="background-color: #121212; padding: 12px; border-radius: 6px; border: 1px solid #2d2d2d; font-size: 13px; text-align: center;">
                     🎨 <strong>Media Ideas:</strong> 
-                    <a href="${unsplashLink}" style="color: #9C27B0; text-decoration: none; font-weight: bold; margin-left: 10px;">📸 Search Unsplash</a> | 
-                    <a href="${giphyLink}" style="color: #9C27B0; text-decoration: none; font-weight: bold; margin-left: 5px;">🎬 Search Giphy</a>
+                    <a href="${unsplashLink}" style="color: #03A9F4; text-decoration: none; margin: 0 10px;">Unsplash 📸</a> | 
+                    <a href="${giphyLink}" style="color: #03A9F4; text-decoration: none; margin: 0 10px;">Giphy 🎬</a>
                 </div>
             </div>
         `;
@@ -83,10 +100,10 @@ async function sendDigest() {
 
     // Add Shortcut
     emailHtml += `
-        <div style="background-color: #2e2e2e; padding: 15px; margin-top: 30px; border-radius: 8px;">
-            <h2 style="color: #FFEB3B;">⌨️ Productivity Shortcut of the Day</h2>
-            <p><strong>${shortcut.shortcut}</strong> (${shortcut.tool})</p>
-            <p>${shortcut.description}</p>
+        <div style="background-color: #1c1c1c; padding: 20px; margin-top: 30px; border-radius: 8px; border: 1px solid #2d2d2d; text-align: center;">
+            <h2 style="color: #ffffff; font-size: 16px; margin-top: 0; text-transform: uppercase; letter-spacing: 0.5px;">⌨️ Shortcut of the Day</h2>
+            <p style="font-size: 15px; font-weight: bold; margin: 10px 0; color: #ffffff;">${shortcut.shortcut} (${shortcut.tool})</p>
+            <p style="font-size: 13px; color: #888; margin: 0;">${shortcut.description}</p>
         </div>
         </div>
     `;
